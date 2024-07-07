@@ -1,0 +1,7 @@
+pydantic
+pillow
+transformers
+requests
+paddleocr
+uvicorn
+gunicorn
