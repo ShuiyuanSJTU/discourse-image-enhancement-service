@@ -54,16 +54,17 @@ class ImageAnalyzer:
             else:
                 self.translation_pipeline = None
 
-    def analyze_images(self, image_info: List[ImageInfo], lang: str = None) \
+    def analyze_images(self, image_info: List[ImageInfo], lang: str = None,
+                        analyze_ocr: bool = True, analyze_description: bool = True) \
             -> List[AnalysisResult]:
         processing_images = self.preprocess_images(image_info, config=self.config)
         images, sha1_list = self.extract_downloaded_images(processing_images)
-        if self.ocr_processor is not None:
+        if analyze_ocr and self.ocr_processor is not None:
             ocr_results = self.ocr_processor.batch_infer(images)
             for sha1, ocr_result in zip(sha1_list, ocr_results):
                 processing_images[sha1].result.ocr_result = ocr_result
 
-        if self.description_pipeline is not None:
+        if analyze_description and self.description_pipeline is not None:
             description_results = self.description_pipeline.batch_infer(images)
             if self.translation_pipeline is not None:
                 description_results = self.translation_pipeline.batch_infer(description_results)

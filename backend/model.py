@@ -24,6 +24,8 @@ class ProcessingImage:
 
 class RequestBody(BaseModel):
     images: List[ImageInfo]
+    ocr: bool = True
+    description: bool = True
     lang: Optional[str] = None
 
 class ResponseBody(BaseModel):
