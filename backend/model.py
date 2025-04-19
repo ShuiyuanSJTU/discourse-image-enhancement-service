@@ -13,7 +13,7 @@ class AnalysisResult(BaseModel):
     success: bool = True
     error: Optional[str] = None
     ocr_result: Optional[List[str]] = None
-    description: Optional[str] = None
+    embedding: Optional[List[float]] = None
 
 @dataclass
 class ProcessingImage:
@@ -22,12 +22,20 @@ class ProcessingImage:
     result: AnalysisResult
     image: Optional[Image] = None
 
-class RequestBody(BaseModel):
+class ImageAnalysisRequestBody(BaseModel):
     images: List[ImageInfo]
     ocr: bool = True
-    description: bool = True
+    embedding: bool = True
     lang: Optional[str] = None
 
-class ResponseBody(BaseModel):
+class ImageAnalysisResponseBody(BaseModel):
     images: List[AnalysisResult]
     message: str = ""
+
+class TextEmbeddingRequestBody(BaseModel):
+    text: str
+
+class TextEmbeddingResponseBody(BaseModel):
+    embedding: List[float]
+    message: str = ""
+    success: bool = True

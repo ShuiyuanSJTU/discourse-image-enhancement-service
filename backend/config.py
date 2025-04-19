@@ -5,18 +5,9 @@ import os
 class Config(BaseModel):
     ocr_enabled: bool = True
     ocr_lang: str = "ch"
-    description_enabled: bool = True
-    description_model: str = "Salesforce/blip-image-captioning-large"
-    translation_enabled: bool = True
-    local_translation_enabled: bool = True
-    local_translation_model: str = "Helsinki-NLP/opus-mt-en-zh"
-    llm_translation_enabled: bool = False
-    llm_translation_model: str = ""
-    llm_translation_endpoint: str = ""
-    llm_translation_api_key: str = ""
-    llm_translation_temperature: float = 0.1
-    llm_translation_max_tokens: int = 1024
-    llm_translation_prompt: str = ""
+    ocr_onnx_model_path: str = ""
+    clip_enabled: bool = True
+    clip_onnx_model_path: str = ""
     download_whitelist_enabled: bool = False
     download_allowed_urls: List[str] = []
     download_check_sha1: bool = False

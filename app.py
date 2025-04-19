@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from backend.model import RequestBody, ResponseBody
+from backend.model import ImageAnalysisRequestBody, ImageAnalysisResponseBody, TextEmbeddingRequestBody, TextEmbeddingResponseBody
 from backend.analyzer import ImageAnalyzer
 from backend.config import init_config
 from threading import Lock
@@ -14,13 +14,20 @@ analyzer = ImageAnalyzer(config=config)
 
 @app.post("/analyze")
 @app.post("/analyze/")
-def analyze(request_body: RequestBody) -> ResponseBody:
+def analyze(request_body: ImageAnalysisRequestBody) -> ImageAnalysisResponseBody:
     with inference_lock:
         results = analyzer.analyze_images(
             request_body.images, analyze_ocr=request_body.ocr,
-            analyze_description=request_body.description
+            analyze_embedding=request_body.embedding
         )
-        return ResponseBody(images=results)
+        return ImageAnalysisResponseBody(images=results)
+
+@app.post("/text_embedding")
+@app.post("/text_embedding/")
+def text_embedding(request_body: TextEmbeddingRequestBody) -> TextEmbeddingResponseBody:
+    with inference_lock:
+        embedding = analyzer.clip_processor.infer(request_body.text)
+        return TextEmbeddingResponseBody(embedding=embedding.tolist())
 
 @app.get("/health")
 @app.get("/health/")

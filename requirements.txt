@@ -1,7 +1,9 @@
 pydantic
 pillow
-transformers
+opencv-python
 requests
-paddleocr
+onnxruntime
+numpy
+fastapi
 uvicorn
 gunicorn

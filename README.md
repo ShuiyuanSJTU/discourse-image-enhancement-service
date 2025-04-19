@@ -55,6 +55,8 @@
       "id": 0
     }
   ],
+  "ocr": true,
+  "embedding": true,
   "lang": "string"
 }
 ```
@@ -70,9 +72,19 @@
       "ocr_result": [
         "string"
       ],
-      "description": "string"
+      "embedding": [
+        0
+      ]
     }
   ],
   "message": ""
 }
 ```
+
+## License
+Apache-2.0
+
+* [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) - Apache-2.0 license
+* [OnnxOCR](https://github.com/jingsongliujing/OnnxOCR) - Apache-2.0 license
+* [Bert](https://github.com/google-research/bert) - Apache-2.0 license
+* [Chinese-CLIP](https://github.com/OFA-Sys/Chinese-CLIP) - MIT license

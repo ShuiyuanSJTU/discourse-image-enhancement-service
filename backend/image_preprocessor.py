@@ -6,12 +6,13 @@ from typing import List, Dict
 import hashlib
 from io import BytesIO
 from fnmatch import fnmatch
+from base64 import b64decode
 
 class ImagePreprocessor:
     def __init__(self, image_info: List[ImageInfo], config: Config):
         self.image_info = image_info
         self.config = config
-        self.processing_images = {}
+        self.processing_images: Dict[str, ProcessingImage] = {}
 
         for image in image_info:
             self.processing_images[image.sha1] = ProcessingImage(sha1=image.sha1, info=image, result=AnalysisResult(sha1=image.sha1))
@@ -28,15 +29,20 @@ class ImagePreprocessor:
         for processing_image in self.processing_images.values():
             image = processing_image.info
             try:
-                self.ensure_whitelist(image.url)
-                response = requests.get(image.url)
-                if response.status_code != 200:
-                    raise ValueError(f"Failed to download image {image.url}, status code {response.status_code}")
+                if image.url.startswith("data:image"):
+                    _, data = image.url.split(",", 1)
+                    image_content = b64decode(data)
+                else:
+                    self.ensure_whitelist(image.url)
+                    response = requests.get(image.url)
+                    if response.status_code != 200:
+                        raise ValueError(f"Failed to download image {image.url}, status code {response.status_code}")
+                    image_content = response.content
                 if check_sha1 and image.sha1 is not None:
-                    sha1 = hashlib.sha1(response.content).hexdigest().lower()
+                    sha1 = hashlib.sha1(image_content).hexdigest().lower()
                     if sha1.lower() != image.sha1.lower():
                         raise ValueError(f"SHA1 mismatch for image {image.url}")
-                image_data = Image.open(BytesIO(response.content)).convert('RGB')
+                image_data = Image.open(BytesIO(image_content)).convert('RGB')
                 processing_image.image = image_data
             except Exception as e:
                 processing_image.result.success = False
