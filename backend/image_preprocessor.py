@@ -2,6 +2,7 @@ import requests
 from PIL import Image
 from .model import ImageInfo, ProcessingImage, AnalysisResult
 from .config import Config
+from .utils import extract_url_encoded_image
 from typing import List, Dict
 import hashlib
 from io import BytesIO
@@ -30,20 +31,18 @@ class ImagePreprocessor:
             image = processing_image.info
             try:
                 if image.url.startswith("data:image"):
-                    _, data = image.url.split(",", 1)
-                    image_content = b64decode(data)
+                    processing_image.image = extract_url_encoded_image(image.url)
                 else:
                     self.ensure_whitelist(image.url)
                     response = requests.get(image.url)
                     if response.status_code != 200:
                         raise ValueError(f"Failed to download image {image.url}, status code {response.status_code}")
                     image_content = response.content
-                if check_sha1 and image.sha1 is not None:
-                    sha1 = hashlib.sha1(image_content).hexdigest().lower()
-                    if sha1.lower() != image.sha1.lower():
-                        raise ValueError(f"SHA1 mismatch for image {image.url}")
-                image_data = Image.open(BytesIO(image_content)).convert('RGB')
-                processing_image.image = image_data
+                    processing_image.image = Image.open(BytesIO(image_content)).convert('RGB')
+                    if check_sha1 and image.sha1 is not None:
+                        sha1 = hashlib.sha1(image_content).hexdigest().lower()
+                        if sha1.lower() != image.sha1.lower():
+                            raise ValueError(f"SHA1 mismatch for image {image.url}")
             except Exception as e:
                 processing_image.result.success = False
                 processing_image.result.error = str(e)

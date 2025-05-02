@@ -35,7 +35,15 @@ class ImageAnalysisResponseBody(BaseModel):
 class TextEmbeddingRequestBody(BaseModel):
     text: str
 
+class ImageEmbeddingRequestBody(BaseModel):
+    image: str
+
 class TextEmbeddingResponseBody(BaseModel):
+    embedding: List[float]
+    message: str = ""
+    success: bool = True
+
+class ImageEmbeddingResponseBody(BaseModel):
     embedding: List[float]
     message: str = ""
     success: bool = True
