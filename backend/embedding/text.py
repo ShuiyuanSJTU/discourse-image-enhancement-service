@@ -11,5 +11,4 @@ class CLIPTextEmbedding:
 
     def __call__(self, text: str):
         text_feature = self.txt_session.run(["unnorm_text_features"], {"text":tokenize([text])})[0]
-        text_feature /= np.linalg.norm(text_feature, axis=-1, keepdims=True)
         return text_feature

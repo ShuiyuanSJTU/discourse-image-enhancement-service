@@ -23,5 +23,4 @@ class CLIPImageEmbedding:
         image = self.preprocess(image)
         image_features = self.img_session.run(["unnorm_image_features"], 
                                               {"image": image})[0]
-        image_features /= np.linalg.norm(image_features, axis=-1, keepdims=True)
         return image_features
