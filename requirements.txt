@@ -1,9 +1,11 @@
 pydantic
 pillow
-opencv-python
+opencv-python-headless
 requests
-onnxruntime
+onnxruntime==1.22.0
 numpy
 fastapi
 uvicorn
 gunicorn
+shapely
+pyclipper

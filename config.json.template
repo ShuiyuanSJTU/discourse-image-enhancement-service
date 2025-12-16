@@ -1,9 +1,9 @@
 {
     "ocr_enabled": true,
     "ocr_lang": "ch",
-    "ocr_onnx_model_path": "",
+    "ocr_onnx_model_path": "models",
     "clip_enabled": true,
-    "clip_onnx_model_path": "",
+    "clip_onnx_model_path": "models",
     "download_whitelist_enabled": false,
     "download_allowed_urls": [],
     "download_check_sha1": false,
