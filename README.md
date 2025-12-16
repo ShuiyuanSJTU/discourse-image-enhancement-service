@@ -16,6 +16,11 @@
 
 ## 运行
 
+* Docker
+    ```bash
+    docker run -d --restart unless-stopped -p 8000:80 -v ./config.json:/app/config.json --name image-enhancement-service ghcr.io/shuiyuansjtu/discourse-image-enhancement-service:latest
+    ```
+
 * 直接运行（不推荐，仅用于调试）：
     ```bash
     python app.py
